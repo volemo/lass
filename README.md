@@ -41,7 +41,8 @@ literal = (sign)? ((width)? "'" base)? number
 name = /[a-zA-Z/!~.@$%^&*_+]+[a-zA-Z0-9/!~-.@$%^&*_+]*/
 number = /[0-9a-fA-F]+/
 width = /[0-9]+/
-string = "\""
+string = /"(?:[^"\\]|\\.)*"/
 comment = /[^\n]*\n/
 ws = /\s+/
+filename = /^[^<>:;,?"*|/]+$/
 ```
