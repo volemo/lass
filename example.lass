@@ -6,5 +6,7 @@ macro1 n -4'hF              ; Macro call
 'hFF00:                     ; Fixed label.
 'b1111_0000                 ; Binary literal
 "Hello world\n\0"           ; String literal.
-a = (a, b) { add 0 0 }
+a = (a, b) {
+  add 0 0
+}
 

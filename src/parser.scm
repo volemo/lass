@@ -30,7 +30,7 @@
 			     #\newline)))))
 
 (define ows
-  (maybe ws))
+  (consume (maybe ws)))
 
 (define filename
   (let ([all-but-prohibited
@@ -136,14 +136,14 @@
   (token 'block
 	 (bind
 	  (sequence (consume (is #\{))
-		    (any-of ows
-			    (consume (is #\newline)))
+		    ows
+		    (consume (maybe (is #\newline)))
+		    ows
 		    (zero-or-more (any-of label
 					  instruction))
 		    ows
-		    (maybe (sequence (consume (is #\;)) ows comment))
-		    (any-of ows
-			    (consume (is #\newline)))
+		    (consume (maybe (is #\newline)))
+		    ows
 		    (consume (is #\})))
 	  (lambda (x)
 	    (result (car (clean-omitted x)))))))
