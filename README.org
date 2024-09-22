@@ -1,0 +1,43 @@
+lass is a little system-agnostic assembler.
+
+Some quirks:
+- Labels and constants are local to a macro block.
+- Lass uses Verilog-style numbers.
+- By default every line is 16 bit aligned.
+- Characters are wastefull i.e. each takes up 16 bits.
+
+* Syntax
+#+INCLUDE: "./example.lass" src lass
+
+** BNF
+#+begin_src bnf
+  code = (ws? statement? ws? comment? nl)*
+  statement = import
+            | label
+            | definition
+            | instruction
+  import = ">" ws? filename
+  label = (name | number) ws? ":"
+  definition = name ws? "=" ws? (name | number | arithmetic | macro)
+  macro = argument-list ws? block
+  argument-list = "(" ws? argument? (ws argument)* ws? ")"
+  argument = (width "'")? name
+  block = "{" ws? nl? code nl? ws? "}"
+  instruction = (name | number | arithmetic | string)+
+  arithmetic = (width "'")?
+               "[" name (ws (name | number | arithmetic))* "]"
+  name = /[@$+_\-*&^%|a-zA-Z]+[@$+_\-*&^%|0-9a-zA-Z]*/
+  number = simple-number
+         | hexadecimal-number
+         | decimal-number
+         | binary-number
+  simple-number = /-?[0-9_]+/
+  hexadecimal-number = width? "'h" /[0-9a-fA-F_]+/
+  decimal-number = width? "'d" /[0-9_]+/
+  binary-number = width? "'b" /[01_]+/
+  width = /[0-9]+/
+  string = /"(\\.|[^\\\n])+"/
+  comment = /;.*/
+  filename = /[^<>:;,?"*|\/]+/
+  ws = /\s*/
+#+end_src

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 > nao-16.lass		    ; hello
 start:                      ; Variable label.
 add 1 2                     ; Instruction from the library.
@@ -10,3 +11,47 @@ a = (a, b) {
   add 0 0
 }
 
+||||||| Stash base
+> nao-16.lass		    ; hello
+start:                      ; Variable label.
+add 1 2                     ; Instruction from the library.
+n = 'hC                     ; Constant.
+macro1 n -4'hF              ; Macro call
+'hFF00:                     ; Fixed label.
+'b1111_0000                 ; Binary literal
+"Hello world\n\0"           ; String literal.
+a = (a, b) { add 0 0 }
+
+=======
+> nao-16.lass                ; Include another file.
+> nao-16.lass                ; Include works on a file once.
+start:                       ; Variable label.
+  add 1 -2                   ; Instruction from the library.
+  n = 'hC                    ; Constant.
+  @loop:                     ; Labels can be scoped by @ symbol.
+    goto @loop               ; Macro call
+  do-work n 4'hF
+'hFF00:                      ; Fixed label.
+  'b1111_0000                ; Binary literal
+  \"Hello world\\n\\0\"          ; String literal.
+  goto start@loop            ; Scoped labels can be accessed
+                             ; using their scope name. 
+a = (a b) { 		     ; Macro definition.
+  add 0 0
+}
+b = (4'a 4'b) {              ; Macro arguments can be fixed.
+  @loop:                     ; All labels in a macro are
+    do-work a b              ; scoped. These labels are
+    goto @loop               ; inaccessible from outside of the
+    @@loop:                  ; macro definition.
+      goto @@loop
+  @end:
+    goto @loop@loop          ; Accessing doubly scoped label.
+}
+arithmetic:
+  jmp [- $ 'hFF00]           ; lass supports arithmetic.
+  [+ [** 2 3] $random]       ; $... marks a magic variable
+  16'[* 3 [shft 1 4]]          ; provided by the assembler.
+  [& [| n 'h0F] [^ 1 3]]     ; $ is the address of the currently
+			     ; compiled line.
+>>>>>>> Stashed changes
